@@ -28,7 +28,8 @@ public:
 				// failure reported in report_failure()
 			} else if (m_success_count) {
 				m_test.m_pass_count++;
-				std::cerr << "[PASS] " << m_name << "\n";
+				if (m_test.m_show_passed)
+					std::cerr << "[PASS] " << m_name << "\n";
 			} else {
 				// no tests executed
 				std::cerr << "[----] " << m_name << "\n";
@@ -77,6 +78,7 @@ public:
 	DataDrivenTest()
 		: m_pass_count(0)
 		, m_fail_count(0)
+		, m_show_passed(false)
 	{}
 
 	~DataDrivenTest() {
@@ -90,6 +92,11 @@ public:
 		} else {
 			std::cerr << "No tests!" << std::endl;
 		}
+	}
+
+	// config
+	void config_show_passed(bool show) {
+		m_show_passed = show;
 	}
 
 	// test case
@@ -111,6 +118,8 @@ public:
 protected:
 	int m_pass_count;
 	int m_fail_count;
+	// config
+	bool m_show_passed;
 };
 
 #endif // DATA_DRIVEN_TEST_H
