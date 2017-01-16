@@ -56,6 +56,10 @@ public:
 		std::ostream& failure() {
 			return report_failure();
 		}
+
+		bool is_failure() const {
+			return m_failure_count != 0;
+		}
 	protected:
 		void report_success() {
 			m_success_count++;
