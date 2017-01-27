@@ -5,6 +5,17 @@
 #include <string>
 #include <utility>
 
+namespace {
+
+template <class T>
+const T& vout(const T& v) { return v; }
+
+const char* vout(bool v) {
+	return v ? "true" : "false";
+}
+
+}
+
 class DataDrivenTest {
 public:
 	class TestCase {
@@ -44,8 +55,8 @@ public:
 				report_failure()
 					<< "+ expected - actual\n"
 					<< " " << value_name << ":\n"
-					<< "  +" << expected << "\n"
-					<< "  -" << value << std::endl;
+					<< "  +" << vout(expected) << "\n"
+					<< "  -" << vout(value) << std::endl;
 			}
 			return *this;
 		}
