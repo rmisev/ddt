@@ -5,12 +5,23 @@
 #include <string>
 #include <utility>
 
-
 namespace {
 
 // Debugger suppor
 
+#if defined(_MSC_VER)
+
+extern "C" __declspec(dllimport) int __stdcall IsDebuggerPresent();
+
+inline bool isDebuggerActive() { return IsDebuggerPresent() != 0; }
+
+#define DATA_DRIVEN_TEST_DEBUG_BREAK	__debugbreak()
+
+#else
+
 inline bool isDebuggerActive() { return false; }
+
+#endif
 
 
 // Value output
@@ -22,7 +33,7 @@ const char* vout(bool v) {
 	return v ? "true" : "false";
 }
 
-}
+} // namespace
 
 class DataDrivenTest {
 public:
