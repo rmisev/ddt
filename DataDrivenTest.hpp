@@ -5,7 +5,15 @@
 #include <string>
 #include <utility>
 
+
 namespace {
+
+// Debugger suppor
+
+inline bool isDebuggerActive() { return false; }
+
+
+// Value output
 
 template <class T>
 const T& vout(const T& v) { return v; }
@@ -94,6 +102,7 @@ public:
 		: m_pass_count(0)
 		, m_fail_count(0)
 		, m_show_passed(false)
+		, m_debug_break(false)
 	{}
 
 	~DataDrivenTest() {
@@ -113,6 +122,9 @@ public:
 	void config_show_passed(bool show) {
 		m_show_passed = show;
 	}
+	void config_debug_break(bool on) {
+		m_debug_break = on;
+	}
 
 	// test case
 	TestCase test_case(const char* name) {
@@ -123,6 +135,13 @@ public:
 	void test_case(const char* name, TestFun test_fun) {
 		TestCase tc(*this, name);
 		test_fun(tc);
+#if defined(DATA_DRIVEN_TEST_DEBUG_BREAK)
+		// debug break;
+		if (tc.is_failure() && m_debug_break && isDebuggerActive()) {
+			DATA_DRIVEN_TEST_DEBUG_BREAK;
+			test_fun(tc);
+		}
+#endif
 	}
 
 	// return value for main function
@@ -135,6 +154,7 @@ protected:
 	int m_fail_count;
 	// config
 	bool m_show_passed;
+	bool m_debug_break;
 };
 
 #endif // DATA_DRIVEN_TEST_H
