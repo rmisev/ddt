@@ -53,8 +53,8 @@ public:
 				report_success();
 			} else {
 				report_failure()
-					<< "- actual + expected\n"
-					<< " " << value_name << ":\n"
+					<< value_name << ":\n"
+					<< " - actual + expected\n"
 					<< "  -" << vout(value) << "\n"
 					<< "  +" << vout(expected) << std::endl;
 			}
