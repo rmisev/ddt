@@ -66,9 +66,9 @@ public:
 			}
 		}
 
-		template<class T>
-		TestCase& assert_equal(const T& expected, const T& value, const char* value_name) {
-			if (std::equal_to<T>()(value, expected)) {
+		template<class T, class ExpT>
+		TestCase& assert_equal(const ExpT& expected, const T& value, const char* value_name) {
+			if (value == expected) {
 				report_success();
 			} else {
 				report_failure()
