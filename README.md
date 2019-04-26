@@ -46,7 +46,7 @@ int main()
     std::ostringstream test_name;
     
     test_name << "Test: factorial(" << item.input << ")";
-    ddt.test_case(test_name.str().c_str(), [&](DataDrivenTest::TestCase& tc) {
+    ddt.test_case(test_name.str(), [&](DataDrivenTest::TestCase& tc) {
       tc.assert_equal(item.expected, factorial(item.input), "factorial");
     });
   }

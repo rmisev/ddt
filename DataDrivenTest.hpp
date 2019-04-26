@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <type_traits>
 #include <utility>
 
 namespace {
@@ -24,6 +25,17 @@ inline bool isDebuggerActive() { return false; }
 #endif
 
 
+// To check name type is string
+
+template<typename T>
+struct is_string : std::integral_constant<bool,
+	std::is_same<char*, typename std::decay<T>::type>::value ||
+	std::is_same<const char*, typename std::decay<T>::type>::value> {};
+
+template <typename Traits, typename Allocator>
+struct is_string<std::basic_string<char, Traits, Allocator>> : std::true_type {};
+
+
 // Value output
 
 template <class T>
@@ -39,7 +51,8 @@ class DataDrivenTest {
 public:
 	class TestCase {
 	public:
-		TestCase(DataDrivenTest& test, const char* name)
+		template <typename StrT, typename = typename std::enable_if<is_string<StrT>::value>::type>
+		TestCase(DataDrivenTest& test, StrT const& name)
 			: m_test(test)
 			, m_name(name)
 			, m_success_count(0)
@@ -66,8 +79,8 @@ public:
 			}
 		}
 
-		template<class T, class ExpT>
-		TestCase& assert_equal(const ExpT& expected, const T& value, const char* value_name) {
+		template<class T, class ExpT, typename StrT, typename = typename std::enable_if<is_string<StrT>::value>::type>
+		TestCase& assert_equal(const ExpT& expected, const T& value, StrT const& value_name) {
 			if (value == expected) {
 				report_success();
 			} else {
@@ -138,12 +151,13 @@ public:
 	}
 
 	// test case
-	TestCase test_case(const char* name) {
+	template <typename StrT, typename = typename std::enable_if<is_string<StrT>::value>::type>
+	TestCase test_case(StrT const& name) {
 		return TestCase(*this, name);
 	}
 
-	template <class TestFun>
-	void test_case(const char* name, TestFun test_fun) {
+	template <class TestFun, typename StrT, typename = typename std::enable_if<is_string<StrT>::value>::type>
+	void test_case(StrT const& name, TestFun test_fun) {
 		TestCase tc(*this, name);
 		test_fun(tc);
 #if defined(DATA_DRIVEN_TEST_DEBUG_BREAK)
