@@ -94,10 +94,10 @@ public:
 			} else if (m_success_count) {
 				m_test.m_pass_count++;
 				if (m_test.m_show_passed)
-					std::cerr << "[PASS] " << m_name << "\n";
+					std::cout << "[PASS] " << m_name << "\n";
 			} else {
 				// no tests executed
-				std::cerr << "[----] " << m_name << "\n";
+				std::cout << "[----] " << m_name << "\n";
 			}
 		}
 
@@ -131,10 +131,10 @@ public:
 		}
 		std::ostream& report_failure() {
 			if (m_failure_count == 0) {
-				std::cerr << "[FAILED] " << m_name << "\n";
+				std::cout << "[FAILED] " << m_name << "\n";
 			}
 			m_failure_count++;
-			return std::cerr;
+			return std::cout;
 		}
 
 		DataDrivenTest& m_test;
@@ -153,14 +153,14 @@ public:
 
 	~DataDrivenTest() {
 		int all_count = m_pass_count + m_fail_count;
-		std::cerr << "\n";
+		std::cout << "\n";
 		if (all_count) {
 			if (m_pass_count)
-				std::cerr << m_pass_count << " passing" << std::endl;
+				std::cout << m_pass_count << " passing" << std::endl;
 			if (m_fail_count)
-				std::cerr << m_fail_count << " failing" << std::endl;
+				std::cout << m_fail_count << " failing" << std::endl;
 		} else {
-			std::cerr << "No tests!" << std::endl;
+			std::cout << "No tests!" << std::endl;
 		}
 	}
 
