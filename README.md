@@ -31,9 +31,9 @@ int main()
 {
   DataDrivenTest ddt;
 
-	// configure
+  // configure
   ddt.config_show_passed(false);
-	ddt.config_debug_break(false);
+  ddt.config_debug_break(false);
 
   // simple test case
   ddt.test_case("simple test case", [&](DataDrivenTest::TestCase& tc) {
