@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2017-2019 Rimas Misevičius
+Copyright (c) 2017-2020 Rimas Misevičius
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -73,7 +73,7 @@ class DataDrivenTest {
 public:
 	class TestCase {
 	public:
-		template <typename StrT, typename = typename std::enable_if<is_string<StrT>::value>::type>
+		template <typename StrT, typename std::enable_if<is_string<StrT>::value, int>::type = 0>
 		TestCase(DataDrivenTest& test, StrT const& name)
 			: m_test(test)
 			, m_name(name)
@@ -101,7 +101,7 @@ public:
 			}
 		}
 
-		template<class T, class ExpT, typename StrT, typename = typename std::enable_if<is_string<StrT>::value>::type>
+		template<class T, class ExpT, typename StrT, typename std::enable_if<is_string<StrT>::value, int>::type = 0>
 		TestCase& assert_equal(const ExpT& expected, const T& value, StrT const& value_name) {
 			if (value == expected) {
 				report_success();
@@ -173,12 +173,12 @@ public:
 	}
 
 	// test case
-	template <typename StrT, typename = typename std::enable_if<is_string<StrT>::value>::type>
+	template <typename StrT, typename std::enable_if<is_string<StrT>::value, int>::type = 0>
 	TestCase test_case(StrT const& name) {
 		return TestCase(*this, name);
 	}
 
-	template <class TestFun, typename StrT, typename = typename std::enable_if<is_string<StrT>::value>::type>
+	template <class TestFun, typename StrT, typename std::enable_if<is_string<StrT>::value, int>::type = 0>
 	void test_case(StrT const& name, TestFun test_fun) {
 		TestCase tc(*this, name);
 		test_fun(tc);
