@@ -169,12 +169,26 @@ public:
 	template <class TestFun, typename StrT, typename std::enable_if<is_string<StrT>::value, int>::type = 0>
 	void test_case(StrT const& name, TestFun test_fun) {
 		TestCase tc(*this, name);
-		test_fun(tc);
 #if defined(DATA_DRIVEN_TEST_DEBUG_BREAK)
-		// debug break;
-		if (tc.is_failure() && m_debug_break && isDebuggerActive()) {
-			DATA_DRIVEN_TEST_DEBUG_BREAK;
-			test_fun(tc);
+		bool was_dbg_break = false;
+		while (true) {
+#endif
+			try {
+				test_fun(tc);
+			}
+			catch (std::exception& ex) {
+				tc.failure() << "Test case threw EXCEPTION: " << ex.what() << "\n";
+			}
+			catch (...) {
+				tc.failure() << "Test case threw UNKNOWN EXCEPTION\n";
+			}
+#if defined(DATA_DRIVEN_TEST_DEBUG_BREAK)
+			// debug break;
+			if (!was_dbg_break && tc.is_failure() && m_debug_break && isDebuggerActive()) {
+				was_dbg_break = true;
+				DATA_DRIVEN_TEST_DEBUG_BREAK;
+			} else
+				break;
 		}
 #endif
 	}
