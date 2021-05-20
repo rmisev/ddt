@@ -77,15 +77,8 @@ public:
 		TestCase(DataDrivenTest& test, StrT const& name)
 			: m_test(test)
 			, m_name(name)
-			, m_success_count(0)
-			, m_failure_count(0)
 		{}
-		TestCase(TestCase&& other)
-			: m_test(other.m_test)
-			, m_name(std::move(other.m_name))
-			, m_success_count(other.m_success_count)
-			, m_failure_count(other.m_failure_count)
-		{}
+		TestCase(TestCase&& other) noexcept = default;
 
 		~TestCase() {
 			if (m_failure_count) {
@@ -139,20 +132,15 @@ public:
 
 		DataDrivenTest& m_test;
 		std::string m_name;
-		int m_success_count;
-		int m_failure_count;
+		int m_success_count = 0;
+		int m_failure_count = 0;
 	};
 
 	// constructor
-	DataDrivenTest()
-		: m_pass_count(0)
-		, m_fail_count(0)
-		, m_show_passed(false)
-		, m_debug_break(false)
-	{}
+	DataDrivenTest() = default;
 
 	~DataDrivenTest() {
-		int all_count = m_pass_count + m_fail_count;
+		const int all_count = m_pass_count + m_fail_count;
 		std::cout << "\n";
 		if (all_count) {
 			if (m_pass_count)
@@ -197,11 +185,11 @@ public:
 	}
 
 protected:
-	int m_pass_count;
-	int m_fail_count;
+	int m_pass_count = 0;
+	int m_fail_count = 0;
 	// config
-	bool m_show_passed;
-	bool m_debug_break;
+	bool m_show_passed = false;
+	bool m_debug_break = false;
 };
 
 #endif // DATA_DRIVEN_TEST_H
