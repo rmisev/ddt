@@ -153,10 +153,10 @@ public:
 	}
 
 	// config
-	void config_show_passed(bool show) {
+	void config_show_passed(bool show) noexcept {
 		m_show_passed = show;
 	}
-	void config_debug_break(bool on) {
+	void config_debug_break(bool on) noexcept {
 		m_debug_break = on;
 	}
 
@@ -180,7 +180,7 @@ public:
 	}
 
 	// return value for main function
-	int result() const {
+	int result() const noexcept {
 		return m_fail_count ? 1 : 0;
 	}
 
