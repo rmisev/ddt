@@ -82,10 +82,10 @@ public:
 
 		~TestCase() {
 			if (m_failure_count) {
-				m_test.m_fail_count++;
+				++m_test.m_fail_count;
 				// failure reported in report_failure()
 			} else if (m_success_count) {
-				m_test.m_pass_count++;
+				++m_test.m_pass_count;
 				if (m_test.m_show_passed)
 					std::cout << "[PASS] " << m_name << "\n";
 			} else {
@@ -120,13 +120,13 @@ public:
 		}
 	protected:
 		void report_success() {
-			m_success_count++;
+			++m_success_count;
 		}
 		std::ostream& report_failure() {
 			if (m_failure_count == 0) {
 				std::cout << "[FAILED] " << m_name << "\n";
 			}
-			m_failure_count++;
+			++m_failure_count;
 			return std::cout;
 		}
 
