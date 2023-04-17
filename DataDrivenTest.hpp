@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2017-2020 Rimas Misevičius
+Copyright (c) 2017-2023 Rimas Misevičius
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -61,9 +61,11 @@ struct is_string<std::basic_string<char, Traits, Allocator>> : std::true_type {}
 // Value output
 
 template <class T>
-const T& vout(const T& v) { return v; }
+inline const T& vout(const T& v) {
+	return v;
+}
 
-const char* vout(bool v) {
+inline const char* vout(bool v) {
 	return v ? "true" : "false";
 }
 
