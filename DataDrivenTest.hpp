@@ -110,6 +110,44 @@ public:
 			return *this;
 		}
 
+		template <class TestFun, typename StrT, typename std::enable_if<is_string<StrT>::value, int>::type = 0>
+		TestCase& assert_throws(TestFun test_fun, StrT const& name) {
+			try {
+				test_fun();
+			}
+			catch (...) {
+				report_success();
+				return *this;
+			}
+			report_failure() << name << " did not throw exception\n";
+			return *this;
+		}
+
+		template <class Exception, class TestFun, typename StrT, typename std::enable_if<is_string<StrT>::value, int>::type = 0>
+		TestCase& assert_throws(TestFun test_fun, StrT const& name) {
+			try {
+				test_fun();
+			}
+			catch (const Exception&) {
+				report_success();
+				return *this;
+			}
+			catch (...) {
+				try {
+					throw;
+				}
+				catch (const std::exception& ex) {
+					report_failure() << name << " threw not expected EXCEPTION: " << ex.what() << "\n";
+				}
+				catch (...) {
+					report_failure() << name << " threw not expected UNKNOWN EXCEPTION\n";
+				}
+				return *this;
+			}
+			report_failure() << name << " did not throw exception\n";
+			return *this;
+		}
+
 		void success() {
 			report_success();
 		}
@@ -178,7 +216,7 @@ public:
 			try {
 				test_fun(tc);
 			}
-			catch (std::exception& ex) {
+			catch (const std::exception& ex) {
 				tc.failure() << "Test case threw EXCEPTION: " << ex.what() << "\n";
 			}
 			catch (...) {
